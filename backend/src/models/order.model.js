@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const orderSchema = new mongoose.Schema(
+const OrderSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -17,28 +17,33 @@ const orderSchema = new mongoose.Schema(
         quantity: {
           type: Number,
           required: true,
-          min: 1,
         },
         price: {
           type: Number,
           required: true,
-          min: 0,
         },
       },
     ],
     totalAmount: {
       type: Number,
       required: true,
-      min: 0,
     },
-    stripeSessionId: {
+    razorpayOrderId: {
       type: String,
-      unique: true,
+      required: true,
+    },
+    razorpayPaymentId: {
+      type: String,
+    },
+    paymentStatus: {
+      type: String,
+      enum: ["pending", "paid"],
+      default: "pending",
     },
   },
   { timestamps: true }
 );
 
-const Order = mongoose.model("Order", orderSchema);
+const Order = mongoose.model("Order", OrderSchema);
 
 export default Order;
