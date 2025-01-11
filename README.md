@@ -51,7 +51,6 @@ CLOUDINARY_API_SECRET=your_api_secret
 RAZORPAY_KEY_ID=your_razorpay_key_id
 RAZORPAY_SECRET_KEY=your_razorpay_secret_key
 
-CLIENT_URL=http://localhost:5173
 NODE_ENV=development
 
 ```shell

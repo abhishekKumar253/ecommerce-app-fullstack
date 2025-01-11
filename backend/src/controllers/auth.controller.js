@@ -73,8 +73,10 @@ export const signup = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { email, username, password } = req.body;
-    const user = await User.findOne({ $or: [{ username }, { email }] });
+    const { identifier, password } = req.body;
+    const user = await User.findOne({
+      $or: [{ username: identifier }, { email: identifier }],
+    });
 
     if (user && (await user.comparePassword(password))) {
       const { accessToken, refreshToken } = generateTokens(user._id);

@@ -10,9 +10,9 @@ import {
   Users,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { useUserStore } from "../stores/useUserStore";
 
 const SignUpPage = () => {
-  const loading = false;
   const [formData, setFormData] = useState({
     name: "",
     username: "",
@@ -21,9 +21,12 @@ const SignUpPage = () => {
     confirmPassword: "",
   });
 
+  const { signup, loading } = useUserStore();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
+    signup(formData);
   };
   return (
     <div className="flex flex-col justify-center py-12 sm:px-6 lg:px-8">
