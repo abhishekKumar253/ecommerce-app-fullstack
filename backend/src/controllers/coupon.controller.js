@@ -6,7 +6,6 @@ export const getCoupon = async (req, res) => {
       userId: req.user._id,
       isActive: true,
     });
-
     res.json(coupon || null);
   } catch (error) {
     console.log("Error in getCoupon controller", error.message);

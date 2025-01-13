@@ -9,6 +9,7 @@ const categories = [
   { href: "/suits", name: "Suits", imageUrl: "/suits.jpg" },
   { href: "/bags", name: "Bags", imageUrl: "/bags.jpg" },
   { href: "/kurti", name: "Kurti", imageUrl: "/kurti.jpg" },
+  { href: "/watch", name: "Watch", imageUrl: "/watch.jpg" },
 ];
 
 const HomePage = () => {

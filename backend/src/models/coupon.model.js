@@ -28,7 +28,9 @@ const couponSchema = new mongoose.Schema(
       unique: true,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 const Coupon = mongoose.model("Coupon", couponSchema);
