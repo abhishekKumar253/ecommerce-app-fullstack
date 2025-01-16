@@ -14,7 +14,7 @@
 - 💰 **Checkout with Razorpay**: Secure and smooth checkout process with Razorpay.
 - 🏷️ **Coupon Code System**: Add discounts using coupon codes.
 - 👑 **Admin Dashboard**: Admin interface for managing users, products, orders, etc.
-- 📊 **Sales Analytics**: Track sales data and generate reports.
+- 📊 **Sales Analytics**: Track sales data and generate reports using **Recharts**.
 - 🎨 **Design with Tailwind CSS**: A beautiful UI that’s mobile-responsive.
 - 🔒 **Security**: Secure user data and transactions.
 - 🚀 **Caching with Redis**: Optimized caching for faster responses.
@@ -23,13 +23,14 @@
 
 ## Tech Stack:
 
-- **Frontend**: React.js, Tailwind CSS, Zustand, Framer Motion
+- **Frontend**: React.js, Tailwind CSS, Zustand, Framer Motion, Recharts
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB
 - **Payment Gateway**: Razorpay
 - **Authentication**: JWT (Refresh & Access Tokens)
 - **Caching**: Redis
 - **Cloud Storage**: Cloudinary for image uploads
+- **Charts**: Recharts for analytics and visualizing sales data
 
 ## Setup the Environment:
 
@@ -60,3 +61,9 @@ npm run build
 ```shell
 npm run start
 ```
+
+# Build the project:
+npm run build
+
+# Start the server:
+npm run start
