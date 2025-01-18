@@ -1,18 +1,54 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { MoveRight } from "lucide-react";
-// import axios from "../utils/axios";
+import axios from "../utils/axios";
 import { useCartStore } from "../stores/useCartStore";
 
 const OrderSummary = () => {
-  const { total, subtotal, coupon, isCouponApplied } = useCartStore();
+  const { total, subtotal, coupon, isCouponApplied, cart } = useCartStore();
 
   const savings = subtotal - total;
   const formattedSubtotal = subtotal.toFixed(2);
   const formattedTotal = total.toFixed(2);
   const formattedSavings = savings.toFixed(2);
 
-  const handlePayment = async () => {};
+  const handlePayment = async () => {
+    try {
+      const res = await axios.post("/payments/create-order", {
+        products: cart,
+        couponCode: coupon ? coupon.code : null,
+      });
+
+      const { orderId, amount } = res.data;
+
+      const options = {
+        key: "rzp_test_FDJio2gW5CTBBE",
+        amount: amount * 100,
+        currency: "INR",
+        name: "E-Shop Mart",
+        description: "Order payment",
+        order_id: orderId,
+        handler: function (response) {
+          alert(
+            "Payment successful. Payment ID: " + response.razorpay_payment_id
+          );
+        },
+        prefill: {
+          name: "Customer Name",
+          email: "customer@example.com",
+          contact: "9999999999",
+        },
+        notes: {
+          address: "Customer address",
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (error) {
+      console.error("Error initiating Razorpay payment:", error);
+    }
+  };
 
   return (
     <motion.div

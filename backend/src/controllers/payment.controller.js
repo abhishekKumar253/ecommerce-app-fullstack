@@ -1,6 +1,15 @@
 import Coupon from "../models/coupon.model.js";
 import Order from "../models/order.model.js";
-import { razorpay } from "../utils/razorpay.js";
+import Razorpay from "razorpay";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+export const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET,
+});
+
 
 export const createOrder = async (req, res) => {
   try {
@@ -24,6 +33,7 @@ export const createOrder = async (req, res) => {
         userId: req.user._id,
         isActive: true,
       });
+
       if (coupon) {
         totalAmount -= Math.round(
           (totalAmount * coupon.discountPercentage) / 100
@@ -125,16 +135,27 @@ export const paymentSuccess = async (req, res) => {
 };
 
 async function createNewCoupon(userId) {
-  await Coupon.findOneAndDelete({ userId });
+  try {
+    const existingCoupon = await Coupon.findOne({ userId });
 
-  const newCoupon = new Coupon({
-    code: "GIFT10",
-    discountPercentage: 10,
-    expirationDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-    userId: userId,
-  });
+    if (existingCoupon) {
+      await Coupon.findOneAndDelete({ userId });
+    }
 
-  await newCoupon.save();
+    const newCoupon = new Coupon({
+      code: "GIFT10",
+      discountPercentage: 10,
+      expirationDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      userId: userId,
+    });
 
-  return newCoupon;
+    await newCoupon.save();
+    console.log("New coupon created:", newCoupon);
+
+    return newCoupon;
+  } catch (error) {
+    console.error("Error creating coupon:", error);
+    throw new Error("Error creating coupon");
+  }
 }
+
