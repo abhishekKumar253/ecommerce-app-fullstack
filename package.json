@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon backend/src/server.js",
-    "start": "node backend/src/server.js"
+    "start": "node backend/src/server.js",
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
   },
   "author": "Abhishek",
   "license": "ISC",
