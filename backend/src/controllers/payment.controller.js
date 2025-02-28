@@ -2,6 +2,7 @@ import Coupon from "../models/coupon.model.js";
 import Order from "../models/order.model.js";
 import Razorpay from "razorpay";
 import dotenv from "dotenv";
+import crypto from "crypto"; 
 
 dotenv.config();
 
@@ -9,7 +10,6 @@ export const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
-
 
 export const createOrder = async (req, res) => {
   try {
@@ -70,11 +70,13 @@ export const createOrder = async (req, res) => {
       amount: totalAmount / 100,
     });
 
+    // Run coupon creation in background
     if (!coupon) {
-      await createNewCoupon(req.user._id);
+      createNewCoupon(req.user._id).catch((err) =>
+        console.error("Error creating coupon:", err)
+      );
     }
   } catch (error) {
-    console.error("Error processing order:", error);
     res
       .status(500)
       .json({ message: "Error processing order", error: error.message });
@@ -92,8 +94,8 @@ export const paymentSuccess = async (req, res) => {
     }
 
     const body = razorpayOrderId + "|" + razorpayPaymentId;
-    const expectedSignature = razorpay.crypto
-      .createHmac("sha256", process.env.RAZORPAY_SECRET)
+    const expectedSignature = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
       .update(body)
       .digest("hex");
 
@@ -126,13 +128,16 @@ export const paymentSuccess = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error("Error processing payment success:", error);
     res.status(500).json({
       message: "Error processing payment success",
       error: error.message,
     });
   }
 };
+
+function generateUniqueCode() {
+  return `GIFT${Math.floor(1000 + Math.random() * 9000)}`;
+}
 
 async function createNewCoupon(userId) {
   try {
@@ -143,14 +148,13 @@ async function createNewCoupon(userId) {
     }
 
     const newCoupon = new Coupon({
-      code: "GIFT10",
+      code: generateUniqueCode(),
       discountPercentage: 10,
       expirationDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
       userId: userId,
     });
 
     await newCoupon.save();
-    console.log("New coupon created:", newCoupon);
 
     return newCoupon;
   } catch (error) {
@@ -158,4 +162,3 @@ async function createNewCoupon(userId) {
     throw new Error("Error creating coupon");
   }
 }
-
