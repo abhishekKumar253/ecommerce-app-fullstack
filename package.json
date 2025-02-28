@@ -5,8 +5,8 @@
   "main": "backend/src/server.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon backend/src/server.js",
-    "start": "node backend/src/server.js",
+    "dev": "NODE_ENV=development nodemon backend/src/server.js",
+    "start": "NODE_ENV=production node backend/src/server.js",
     "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
   },
   "author": "Abhishek",
