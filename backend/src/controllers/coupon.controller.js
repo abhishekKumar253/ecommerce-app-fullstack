@@ -16,8 +16,13 @@ export const getCoupon = async (req, res) => {
 export const validateCoupon = async (req, res) => {
   try {
     const { code } = req.body;
+
+    if (!code) {
+      return res.status(400).json({ message: "Coupon code is required" });
+    }
+
     const coupon = await Coupon.findOne({
-      code: code,
+      code: code.toUpperCase().trim(),
       userId: req.user._id,
       isActive: true,
     });

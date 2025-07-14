@@ -1,4 +1,3 @@
-import { config } from "../db/config.js";
 import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
@@ -8,12 +7,12 @@ export const protectRoute = async (req, res, next) => {
 
     if (!accessToken) {
       return res
-        .status(402)
+        .status(401)
         .json({ message: "Unauthorized - No access token found" });
     }
 
     try {
-      const decoded = jwt.verify(accessToken, config.accesstokenSecret);
+      const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
       const user = await User.findById(decoded.userId).select("-password");
 
       if (!user) {
@@ -30,7 +29,6 @@ export const protectRoute = async (req, res, next) => {
       }
       throw error;
     }
-    
   } catch (error) {
     console.log("Error in protectRoute middleware", error.message);
     return res.status(401).json({ message: "Unauthorized" });

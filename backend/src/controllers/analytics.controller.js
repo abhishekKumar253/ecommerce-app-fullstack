@@ -10,7 +10,7 @@ export const getAnalyticsData = async () => {
     const salesData = await Order.aggregate([
       {
         $group: {
-          _id: null, // it group all document together,
+          _id: null, // it groups all documents together,
           totalSales: { $sum: 1 },
           totalRevenue: { $sum: "$totalAmount" },
         },
@@ -30,7 +30,7 @@ export const getAnalyticsData = async () => {
     };
   } catch (error) {
     console.log("Error in getAnalyticsData controller", error.message);
-    res.status(500).json({ message: "Server error", error: error.message });
+    throw new Error("Server error");
   }
 };
 
@@ -59,7 +59,6 @@ export const getDailySalesData = async (startDate, endDate) => {
 
     return dateArray.map((date) => {
       const foundData = dailySalesData.find((item) => item._id === date);
-
       return {
         date,
         sales: foundData?.sales || 0,
@@ -68,7 +67,7 @@ export const getDailySalesData = async (startDate, endDate) => {
     });
   } catch (error) {
     console.log("Error in getDailySalesData controller", error.message);
-    res.status(500).json({ message: "Server error", error: error.message });
+    throw new Error("Server error");
   }
 };
 

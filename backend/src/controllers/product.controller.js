@@ -19,15 +19,12 @@ export const getFeaturedProducts = async (req, res) => {
       return res.json(JSON.parse(featuredProducts));
     }
 
-    // if not inredis, fetch from mongodb
-    // .lean() mongoose queries return an instance of the Mongoose Document class, which is a plain JavaScript object.this can significantly improve performance
     featuredProducts = await Product.find({ isFeatured: true }).lean();
 
     if (!featuredProducts) {
       return res.status(404).json({ message: "No featured products found" });
     }
 
-    // store in redis for future quick access
     await redis.set("featured_products", JSON.stringify(featuredProducts));
 
     res.json(featuredProducts);
@@ -40,6 +37,10 @@ export const getFeaturedProducts = async (req, res) => {
 export const createProduct = async (req, res) => {
   try {
     const { name, description, price, image, category } = req.body;
+
+    if (!name || !description || !price || !category || !image) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
 
     let cloudinaryResponse = null;
 
@@ -74,7 +75,7 @@ export const deleteProduct = async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    if (product.imgae) {
+    if (product.image) {
       const publicId = product.image.split("/").pop().split(".")[0];
       try {
         await cloudinary.uploader.destroy(publicId);
@@ -130,14 +131,14 @@ export const getProductsByCategory = async (req, res) => {
 
 export const toggleFeaturedProduct = async (req, res) => {
   try {
-    const products = await Product.findById(req.params.id);
-    if (products) {
-      products.isFeatured = !products.isFeatured;
-      const updatedProduct = await products.save();
+    const product = await Product.findById(req.params.id);
+    if (product) {
+      product.isFeatured = !product.isFeatured;
+      const updatedProduct = await product.save();
       await updateFeaturedProductsCache();
       res.json(updatedProduct);
     } else {
-      res.status(402).json({ message: "Product not found" });
+      res.status(404).json({ message: "Product not found" });
     }
   } catch (error) {
     console.log("Error in toggleFeaturedProduct controller", error.message);

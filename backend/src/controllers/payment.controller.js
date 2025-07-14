@@ -47,6 +47,8 @@ export const createOrder = async (req, res) => {
       receipt: `order_rcptid_${new Date().getTime()}`,
       payment_capture: 1,
     });
+    console.log("Razorpay object:", razorpay);
+
 
     const order = new Order({
       user: req.user._id,
