@@ -1,7 +1,7 @@
-import CategoryItem from "./CategoryItem";
 import { useEffect } from "react";
-import { useProductStore } from "../stores/useProductStore";
+import CategoryItem from "../components/CategoryItem";
 import FeaturedProducts from "../components/FeaturedProducts";
+import { useProductStore } from "../stores/useProductStore";
 
 const categories = [
   { href: "/jeans", name: "Jeans", imageUrl: "/jeans.jpg" },

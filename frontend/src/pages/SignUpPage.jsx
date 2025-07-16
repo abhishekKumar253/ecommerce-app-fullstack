@@ -14,7 +14,7 @@ import { useUserStore } from "../stores/useUserStore";
 
 const SignUpPage = () => {
   const [formData, setFormData] = useState({
-    name: "",
+    fullName: "",
     username: "",
     email: "",
     password: "",
@@ -25,7 +25,6 @@ const SignUpPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
     signup(formData);
   };
   return (
@@ -61,12 +60,12 @@ const SignUpPage = () => {
                   <Users className="h-5 w-5 text-gray-400" aria-hidden="true" />
                 </div>
                 <input
-                  id="name"
+                  id="fullName"
                   type="text"
                   required
-                  value={formData.name}
+                  value={formData.fullName}
                   onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
+                    setFormData({ ...formData, fullName: e.target.value })
                   }
                   className="block w-full px-3 py-2 pl-10 bg-gray-700 border border-gray-600 rounded-md shadow-sm
 									 placeholder-gray-400 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"

@@ -1,10 +1,10 @@
 import { redis } from "../db/redis.js";
-import Product from "../models/product.model.js";
 import cloudinary from "../utils/cloudinary.js";
+import Product from "../models/product.model.js";
 
 export const getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find({}); // find all products
+    const products = await Product.find({}); 
     res.json({ products });
   } catch (error) {
     console.log("Error in getAllProducts controller", error.message);
@@ -37,10 +37,6 @@ export const getFeaturedProducts = async (req, res) => {
 export const createProduct = async (req, res) => {
   try {
     const { name, description, price, image, category } = req.body;
-
-    if (!name || !description || !price || !category || !image) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
 
     let cloudinaryResponse = null;
 
@@ -78,10 +74,10 @@ export const deleteProduct = async (req, res) => {
     if (product.image) {
       const publicId = product.image.split("/").pop().split(".")[0];
       try {
-        await cloudinary.uploader.destroy(publicId);
-        console.log("image deleted from cloudinary");
+        await cloudinary.uploader.destroy(`products/${publicId}`);
+        console.log("deleted image from cloduinary");
       } catch (error) {
-        console.log("error deleting image from cloudinary", error);
+        console.log("error deleting image from cloduinary", error);
       }
     }
 
@@ -105,8 +101,8 @@ export const getRecommendedProducts = async (req, res) => {
           _id: 1,
           name: 1,
           description: 1,
-          price: 1,
           image: 1,
+          price: 1,
         },
       },
     ]);
@@ -148,6 +144,7 @@ export const toggleFeaturedProduct = async (req, res) => {
 
 async function updateFeaturedProductsCache() {
   try {
+
     const featuredProducts = await Product.find({ isFeatured: true }).lean();
     await redis.set("featured_products", JSON.stringify(featuredProducts));
   } catch (error) {

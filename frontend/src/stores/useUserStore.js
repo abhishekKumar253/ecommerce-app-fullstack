@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import axios from "../utils/axios";
+import axios from "../lib/axios";
 import { toast } from "react-hot-toast";
 
 export const useUserStore = create((set, get) => ({
@@ -7,7 +7,7 @@ export const useUserStore = create((set, get) => ({
   loading: false,
   checkingAuth: true,
 
-  signup: async ({ name, username, email, password, confirmPassword }) => {
+  signup: async ({ fullName, username, email, password, confirmPassword }) => {
     set({ loading: true });
 
     if (password.length < 6) {
@@ -22,7 +22,7 @@ export const useUserStore = create((set, get) => ({
 
     try {
       const res = await axios.post("/auth/signup", {
-        name,
+        fullName,
         username,
         email,
         password,

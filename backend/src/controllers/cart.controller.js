@@ -6,7 +6,7 @@ export const getCartProducts = async (req, res) => {
 
     const cartItems = products.map((product) => {
       const item = req.user.cartItems.find(
-        (cartItem) => cartItem.id === product._id.toString()
+        (cartItem) => cartItem.id === product.id
       );
       return { ...product.toJSON(), quantity: item.quantity };
     });
@@ -27,7 +27,7 @@ export const addToCart = async (req, res) => {
     if (existingItem) {
       existingItem.quantity += 1;
     } else {
-      user.cartItems.push({ id: productId, quantity: 1 });
+      user.cartItems.push(productId);
     }
 
     await user.save();
@@ -42,17 +42,14 @@ export const removeAllFromCart = async (req, res) => {
   try {
     const { productId } = req.body;
     const user = req.user;
-
     if (!productId) {
       user.cartItems = [];
     } else {
       user.cartItems = user.cartItems.filter((item) => item.id !== productId);
     }
-
     await user.save();
     res.json(user.cartItems);
   } catch (error) {
-    console.log("Error in removeFromCard controller", error.message);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
@@ -62,11 +59,6 @@ export const updateQuantity = async (req, res) => {
     const { id: productId } = req.params;
     const { quantity } = req.body;
     const user = req.user;
-
-    if (quantity < 0) {
-      return res.status(400).json({ message: "Quantity cannot be negative" });
-    }
-
     const existingItem = user.cartItems.find((item) => item.id === productId);
 
     if (existingItem) {
@@ -80,7 +72,7 @@ export const updateQuantity = async (req, res) => {
       await user.save();
       res.json(user.cartItems);
     } else {
-      res.status(402).json({ message: "Product not found" });
+      res.status(404).json({ message: "Product not found" });
     }
   } catch (error) {
     console.log("Error in updateQuantity controller", error.message);

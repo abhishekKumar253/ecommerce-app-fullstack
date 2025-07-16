@@ -37,8 +37,8 @@ const CreateProductForm = () => {
         category: "",
         image: "",
       });
-    } catch {
-      console.log("error creating a product");
+    } catch (error) {
+      console.log("Error creating a product:", error);
     }
   };
 

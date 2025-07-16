@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { MoveRight } from "lucide-react";
-import axios from "../utils/axios";
+import axios from "../lib/axios";
 import { useCartStore } from "../stores/useCartStore";
 
 const OrderSummary = () => {
@@ -14,7 +14,7 @@ const OrderSummary = () => {
 
   const handlePayment = async () => {
     try {
-      const res = await axios.post("/payments/create-order", {
+      const res = await axios.post("/payment/create-order", {
         products: cart,
         couponCode: coupon ? coupon.code : null,
       });

@@ -1,7 +1,7 @@
-import { motion } from "framer-motion";
-import { useCartStore } from "../stores/useCartStore";
-import { ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useCartStore } from "../stores/useCartStore";
+import { motion } from "framer-motion";
+import { ShoppingCart } from "lucide-react";
 import CartItem from "../components/CartItem";
 import PeopleAlsoBought from "../components/PeopleAlsoBought";
 import OrderSummary from "../components/OrderSummary";
@@ -48,7 +48,6 @@ const CartPage = () => {
     </div>
   );
 };
-
 export default CartPage;
 
 const EmptyCartUI = () => (

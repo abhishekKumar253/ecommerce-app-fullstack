@@ -3,35 +3,30 @@ import Product from "../models/product.model.js";
 import User from "../models/user.model.js";
 
 export const getAnalyticsData = async () => {
-  try {
-    const totalUsers = await User.countDocuments();
-    const totalProducts = await Product.countDocuments();
+  const totalUsers = await User.countDocuments();
+  const totalProducts = await Product.countDocuments();
 
-    const salesData = await Order.aggregate([
-      {
-        $group: {
-          _id: null, // it groups all documents together,
-          totalSales: { $sum: 1 },
-          totalRevenue: { $sum: "$totalAmount" },
-        },
+  const salesData = await Order.aggregate([
+    {
+      $group: {
+        _id: null, 
+        totalSales: { $sum: 1 },
+        totalRevenue: { $sum: "$totalAmount" },
       },
-    ]);
+    },
+  ]);
 
-    const { totalSales, totalRevenue } = salesData[0] || {
-      totalSales: 0,
-      totalRevenue: 0,
-    };
+  const { totalSales, totalRevenue } = salesData[0] || {
+    totalSales: 0,
+    totalRevenue: 0,
+  };
 
-    return {
-      users: totalUsers,
-      products: totalProducts,
-      totalSales,
-      totalRevenue,
-    };
-  } catch (error) {
-    console.log("Error in getAnalyticsData controller", error.message);
-    throw new Error("Server error");
-  }
+  return {
+    users: totalUsers,
+    products: totalProducts,
+    totalSales,
+    totalRevenue,
+  };
 };
 
 export const getDailySalesData = async (startDate, endDate) => {
@@ -59,6 +54,7 @@ export const getDailySalesData = async (startDate, endDate) => {
 
     return dateArray.map((date) => {
       const foundData = dailySalesData.find((item) => item._id === date);
+
       return {
         date,
         sales: foundData?.sales || 0,
@@ -66,8 +62,7 @@ export const getDailySalesData = async (startDate, endDate) => {
       };
     });
   } catch (error) {
-    console.log("Error in getDailySalesData controller", error.message);
-    throw new Error("Server error");
+    throw error;
   }
 };
 

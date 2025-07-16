@@ -37,7 +37,7 @@ const LoginPage = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label
-                htmlFor="email"
+                htmlFor="identifier"
                 className="block text-sm font-medium text-gray-300"
               >
                 Username or Email
@@ -47,15 +47,14 @@ const LoginPage = () => {
                   <User className="h-5 w-5 text-gray-400" aria-hidden="true" />
                 </div>
                 <input
-                  id="text"
+                  id="identifier"
                   type="text"
                   required
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
                   className=" block w-full px-3 py-2 pl-10 bg-gray-700 border border-gray-600 
-									rounded-md shadow-sm
-									 placeholder-gray-400 focus:outline-none focus:ring-emerald-500 
-									 focus:border-emerald-500 sm:text-sm"
+      rounded-md shadow-sm placeholder-gray-400 focus:outline-none 
+      focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
                   placeholder="Username or Email"
                 />
               </div>

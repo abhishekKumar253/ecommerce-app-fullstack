@@ -19,7 +19,7 @@ const storeRefreshToken = async (userId, refreshToken) => {
     `refresh_token:${userId}`,
     refreshToken,
     "EX",
-    10 * 24 * 60 * 60
+    10 * 24 * 60 * 60 // 10 days
   );
 };
 

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Confetti from "react-confetti";
 import { useCartStore } from "../stores/useCartStore";
-import axios from "../utils/axios";
+import axios from "../lib/axios";
 
 const PurchaseSuccessPage = () => {
   const [isProcessing, setIsProcessing] = useState(true);
@@ -17,7 +17,7 @@ const PurchaseSuccessPage = () => {
       razorpayPaymentId
     ) => {
       try {
-        await axios.post("/payments/payment-success", {
+        await axios.post("/payment/payment-success", {
           orderId: razorpayOrderId,
           paymentId: razorpayPaymentId,
         });
